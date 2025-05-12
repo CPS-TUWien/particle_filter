@@ -13,15 +13,15 @@ To run this, you need to ensure that both the map_server ROS package, and the py
 For the map server:
 ```
 sudo apt-get update
-rosdep install -r --from-paths src --ignore-src --rosdistro kinetic -y
+rosdep install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 ```
 
 For [RangeLibc](https://github.com/f1tenth/range_libc):
 
 ```
-sudo pip install cython
-git clone http://github.com/kctess5/range_libc
-cd range_libc/pywrappers
+sudo python3 -m pip install cython
+git clone http://github.com/f1tenth/range_libc
+cd range_libc/pywrapper
 # on VM
 ./compile.sh
 # on car - compiles GPU ray casting methods
@@ -33,12 +33,12 @@ cd range_libc/pywrappers
 The majority of parameters you might want to tweak are in the launch/localize.launch file. You may have to modify the "odometry_topic" or "scan_topic" parameters to match your environment.
 
 ```
-roslaunch particle_filter localize.launch
+ros2 launch particle_filter localize_launch.py
 ```
 
 Once the particle filter is running, you can visualize the map and other particle filter visualization message in RViz. Use the "2D Pose Estimate" tool from the RViz toolbar to initialize the particle locations.
 
-See [launch/localize.launch](/particle_filter/launch/localize.launch) for docs on available parameters and arguments.
+See [config/localize.yaml](./config/localize.yaml) for docs on available parameters and arguments.
 
 The "range_method" parameter determines which RangeLibc ray casting method to use. The default is cddt because it is fast and has a low initialization time. The fastest option on the CPU is "glt" but it has a slow startup. The fastest version if you have can compile RangeLibc with CUDA enabled is "rmgpu". See this performance comparison chart:
 
@@ -46,9 +46,9 @@ The "range_method" parameter determines which RangeLibc ray casting method to us
 
 # Docs
 
-This code is the staff solution to the lab guide found in the [/docs](/particle_filter/docs) folder. A mathematical derivation of MCL is available in that guide.
+This code is the staff solution to the lab guide found in the [/docs](./docs) folder. A mathematical derivation of MCL is available in that guide.
 
-There is also documentation on RangeLibc in the [/docs](/particle_filter/docs) folder.
+There is also documentation on RangeLibc in the [/docs](./docs) folder.
 
 The code itself also contains comments describing purpose of each method.
 
