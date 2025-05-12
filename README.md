@@ -19,6 +19,12 @@ rosdep install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 For [RangeLibc](https://github.com/f1tenth/range_libc):
 
 ```
+python3 -m pip install Cython --break-system-packages
+python3 -m pip install git+https://github.com/f1tenth/range_libc@781acfc9#subdirectory=pywrapper --break-system-packages
+```
+
+In case the previous method does not work, you can compile and install the python wrappers manually:
+```
 sudo python3 -m pip install cython
 git clone http://github.com/f1tenth/range_libc
 cd range_libc/pywrapper
