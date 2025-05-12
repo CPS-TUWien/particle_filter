@@ -13,7 +13,7 @@ To run this, you need to ensure that both the map_server ROS package, and the py
 For the map server:
 ```
 sudo apt-get update
-rosdep install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
+PIP_BREAK_SYSTEM_PACKAGES=1 rosdep install -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y
 ```
 
 For [RangeLibc](https://github.com/f1tenth/range_libc):
