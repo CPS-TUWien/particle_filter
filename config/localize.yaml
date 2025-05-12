@@ -8,15 +8,15 @@ particle_filter:
     max_particles: 4000
     squash_factor: 2.2
     # visualization
-    viz: 1
+    viz: true
     max_viz_particles: 60
     # ray marching method
     range_method: 'rmgpu'
     theta_discretization: 112
     # range data filtering
-    max_range: 10
-    fine_timing: 0
-    publish_odom: 1
+    max_range: 10.0
+    fine_timing: false
+    publish_odom: true
     # sensor model constants
     z_short: 0.01
     z_max: 0.07
