@@ -86,6 +86,7 @@ class ParticleFiler(Node):
         self.declare_parameter('motion_dispersion_theta', Parameter.Type.DOUBLE)
         self.declare_parameter('scan_topic', Parameter.Type.STRING)
         self.declare_parameter('odometry_topic', Parameter.Type.STRING)
+        self.declare_parameter('publish_tf', Parameter.Type.BOOL)
 
         # parameters
         self.ANGLE_STEP           = self.get_parameter('angle_step').value
@@ -99,6 +100,7 @@ class ParticleFiler(Node):
         self.SHOW_FINE_TIMING     = self.get_parameter('fine_timing').value
         self.PUBLISH_ODOM         = self.get_parameter('publish_odom').value
         self.DO_VIZ               = self.get_parameter('viz').value
+        self.PUBLISH_TF           = self.get_parameter('publish_tf').value
 
         # sensor model constants
         self.Z_SHORT   = self.get_parameter('z_short').value
@@ -238,25 +240,27 @@ class ParticleFiler(Node):
 
     def publish_tf(self, pose, stamp=None):
         ''' Publish a tf for the car. This tells ROS where the car is with respect to the map. '''
-        if stamp == None:
-            stamp = self.get_clock().now().to_msg()
+        if self.PUBLISH_TF:
+            if stamp == None:
+                stamp = self.get_clock().now().to_msg()
 
-        t = TransformStamped()
-        # header
-        t.header.stamp = stamp
-        t.header.frame_id = '/map'
-        t.child_frame_id = '/laser'
-        # translation
-        t.transform.translation.x = pose[0]
-        t.transform.translation.y = pose[1]
-        t.transform.translation.z = 0.0
-        q = tf_transformations.quaternion_from_euler(0., 0., pose[2])
-        # rotation
-        t.transform.rotation.x = q[0]
-        t.transform.rotation.y = q[1]
-        t.transform.rotation.z = q[2]
-        t.transform.rotation.w = q[3]
-        self.pub_tf.sendTransform(t)
+            t = TransformStamped()
+            # header
+            t.header.stamp = stamp
+            t.header.frame_id = '/map'
+            t.child_frame_id = '/laser'
+            # translation
+            t.transform.translation.x = pose[0]
+            t.transform.translation.y = pose[1]
+            t.transform.translation.z = 0.0
+            q = tf_transformations.quaternion_from_euler(0., 0., pose[2])
+            # rotation
+            t.transform.rotation.x = q[0]
+            t.transform.rotation.y = q[1]
+            t.transform.rotation.z = q[2]
+            t.transform.rotation.w = q[3]
+            self.pub_tf.sendTransform(t)
+
         # also publish odometry to facilitate getting the localization pose
         if self.PUBLISH_ODOM:
             odom = Odometry()

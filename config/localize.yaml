@@ -17,6 +17,7 @@ particle_filter:
     max_range: 10.0
     fine_timing: false
     publish_odom: true
+    publish_tf: false
     # sensor model constants
     z_short: 0.01
     z_max: 0.07
